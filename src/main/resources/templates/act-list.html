@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Все Акты</title>
+</head>
+<body>
+<div th:switch="${acts}">
+    <h2 th:case="null">Акты отсутствуют!</h2>
+    <div th:case="*">
+        <h2>Акты</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>Id</th>
+                <th>Месяц </th>
+                <th>Раздел проекта</th>
+                <th>Стоимость</th>
+                <th>Статус</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="act : ${acts}">
+                <td th:text="${act.id}"></td>
+                <td th:text="${act.reportingPeriod}"></td>
+                <td th:text="${act.projectSection}"></td>
+                <td th:text="${act.price}"></td>
+                <td th:text="${act.status}"></td>
+                <td><a th:href="@{act-update/{id}(id=${act.id})}">Изменить</a></td>
+                <td><a th:href="@{act-delete/{id}(id=${act.id})}">Удалить</a></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <p><a href="/act-create">Создание акта</a></p>
+</div>
+</body>
+</html>
