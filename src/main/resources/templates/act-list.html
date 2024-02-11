@@ -9,14 +9,14 @@
     <h2 th:case="null">Акты отсутствуют!</h2>
     <div th:case="*">
         <h2>Акты</h2>
-        <table>
+        <table class="table table-striped">
             <thead>
             <tr>
-                <th>Id</th>
-                <th>Месяц </th>
-                <th>Раздел проекта</th>
-                <th>Стоимость</th>
-                <th>Статус</th>
+                <th scope="col">Id</th>
+                <th scope="col">Месяц </th>
+                <th scope="col">Раздел проекта</th>
+                <th scope="col">Стоимость</th>
+                <th scope="col">Статус</th>
             </tr>
             </thead>
             <tbody>
