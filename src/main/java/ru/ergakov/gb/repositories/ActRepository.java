@@ -1,46 +1,42 @@
 package ru.ergakov.gb.repositories;
 
+import lombok.AllArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
+import ru.ergakov.gb.config.DbScripts;
 import ru.ergakov.gb.model.Act;
 
+import java.lang.reflect.Field;
 import java.util.List;
 
 @Repository
+@AllArgsConstructor
 public class ActRepository {
 
-
     private final JdbcTemplate jdbc;
+    private final DbScripts dbScripts;
 
-    public ActRepository(JdbcTemplate jdbc) {
-        this.jdbc = jdbc;
-    }
 
     public List<Act> findAll() {
-        String sql = "SELECT * FROM actTable";
-        return jdbc.query(sql, newActRowMapper());
+        return jdbc.query(dbScripts.getFindAll(), newActRowMapper());
     }
 
     public Act save(Act act) {
-        String sql = "INSERT INTO actTable (reportingPeriod,projectSection, price, status) VALUES ( ?, ?, ?, ?)";
-        jdbc.update(sql, act.getReportingPeriod(), act.getProjectSection(), act.getPrice(), act.getStatus());
+        jdbc.update(dbScripts.getSave(), act.getReportingPeriod(), act.getProjectSection(), act.getPrice(), act.getStatus());
         return act;
     }
 
     public void deleteById(int id) {
-        String sql = "DELETE FROM actTable WHERE id=?";
-        jdbc.update(sql, id);
+        jdbc.update(dbScripts.getDeleteById(), id);
     }
 
     public Act getOne(int id) {
-        String sql = "SELECT * FROM actTable WHERE id=?";
-        return jdbc.queryForObject(sql, newActRowMapper(), id);
+        return jdbc.queryForObject(dbScripts.getGetOne(), newActRowMapper(), id);
     }
 
-    public Act updateUser(Act act) {
-        String sql = "UPDATE actTable SET reportingPeriod=?, projectSection=?, price=?, status=? WHERE id=?";
-        jdbc.update(sql, act.getReportingPeriod(), act.getProjectSection(), act.getPrice(), act.getStatus(), act.getId());
+    public Act updateAct(Act act) {
+        jdbc.update(dbScripts.getUpdateAct(), act.getReportingPeriod(), act.getProjectSection(), act.getPrice(), act.getStatus(), act.getId());
         return act;
     }
 
@@ -50,13 +46,16 @@ public class ActRepository {
      * @return Словарь пользователей
      */
     private RowMapper<Act> newActRowMapper() {
+
         return (r, i) -> {
             Act rowObject = new Act();
-            rowObject.setId(r.getInt("id"));
-            rowObject.setReportingPeriod(r.getString("reportingPeriod"));
-            rowObject.setProjectSection(r.getString("projectSection"));
-            rowObject.setPrice(r.getDouble("price"));
-            rowObject.setStatus(r.getString("status"));
+            Class<? extends Act> act = rowObject.getClass();
+            Field[] fields = act.getDeclaredFields();
+            rowObject.setId(r.getInt(fields[0].getName()));
+            rowObject.setReportingPeriod(r.getString(fields[1].getName()));
+            rowObject.setProjectSection(r.getString(fields[2].getName()));
+            rowObject.setPrice(r.getDouble(fields[3].getName()));
+            rowObject.setStatus(r.getString(fields[4].getName()));
             return rowObject;
         };
     }

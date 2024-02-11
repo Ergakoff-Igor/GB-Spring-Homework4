@@ -26,13 +26,13 @@
                 <td th:text="${act.projectSection}"></td>
                 <td th:text="${act.price}"></td>
                 <td th:text="${act.status}"></td>
-                <td><a th:href="@{act-update/{id}(id=${act.id})}">Изменить</a></td>
-                <td><a th:href="@{act-delete/{id}(id=${act.id})}">Удалить</a></td>
+                <td><a th:href="@{act-update/{id}(id=${act.id})}"><input type="submit" value="Изменить акт"></a></td>
+                <td><a th:href="@{act-delete/{id}(id=${act.id})}"><input type="submit" value="Удалить акт"></a></td>
             </tr>
             </tbody>
         </table>
     </div>
-    <p><a href="/act-create">Создание акта</a></p>
+    <p><a href="/act-create"><input type="submit" value="Создание акта"></a></p>
 </div>
 </body>
 </html>

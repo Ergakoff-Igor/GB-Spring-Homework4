@@ -32,6 +32,6 @@ public class ActService {
     }
 
     public Act updateAct(Act act){
-        return actRepository.updateUser(act);
+        return actRepository.updateAct(act);
     }
 }
